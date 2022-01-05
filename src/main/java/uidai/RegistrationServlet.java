@@ -7,8 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.*; 
-
+import javax.swing.JOptionPane;
+ 
 public class RegistrationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
@@ -24,13 +24,14 @@ public class RegistrationServlet extends HttpServlet {
 		String mobile = request.getParameter("mobile");
 		String password = request.getParameter("upass");
 		String AbleToAddOrNot = "0";
+		String AbleToAddOrNot1 = "0";
 		RegistrationDatabase checking = new RegistrationDatabase();
 		try {
 			AbleToAddOrNot = checking.validate(mobile,password);
+			AbleToAddOrNot1 = checking.uniqueNumber(mobile);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			
 		}
 		if(!"0".equals(AbleToAddOrNot)) {
 			UserDatabase checking1 = new UserDatabase();
@@ -39,6 +40,7 @@ public class RegistrationServlet extends HttpServlet {
 			{
 				if(checking1.getConnection()!=null) {
 					checking1.insertAadhar(AbleToAddOrNot);
+					
 				}
 			} 
 			catch (Exception e) 
@@ -47,6 +49,7 @@ public class RegistrationServlet extends HttpServlet {
 			}
 			
 			String aadharNo = AbleToAddOrNot;
+			String uniqueNo = AbleToAddOrNot1;
 			out.println( "<html>\r\n"
 					+ "<head>\r\n"
 					 
@@ -75,7 +78,7 @@ public class RegistrationServlet extends HttpServlet {
 					+ "\r\n"
 					+ ".form-box{\r\n"
 					+ "	width: 380px;\r\n"
-					+ "	height: 430px;\r\n"
+					+ "	height: 450px;\r\n"
 					+ "	position: relative;\r\n"
 					+ "	margin: 6% auto;\r\n"
 					+ "	background: white;\r\n"
@@ -110,7 +113,7 @@ public class RegistrationServlet extends HttpServlet {
 					+ "  font-size: 25px;\r\n"
 					+ "  padding: 10px 30px;\r\n"
 					+ "  margin-left: 25px;\r\n"
-					+ "  margin-top: 65px;\r\n"
+					+ "  margin-top: 35px;\r\n"
 					+ "  cursor: pointer;\r\n"
 					+ "  width: 85%;\r\n"
 					+ "  border:0;\r\n"
@@ -118,65 +121,79 @@ public class RegistrationServlet extends HttpServlet {
 					+ "  outline: none;\r\n"
 					+ "  \r\n"
 					+ "}\r\n"
-					+ " .button {\r\n"
-					+ "  background: linear-gradient(to right,  #FAEBD7,rgb(255, 128, 64));\r\n"
+					+ ".button {\r\n"
+					+ "  background: linear-gradient(to right,  #FAEBD7,rgb(255, 128, 64));"
 					+ "  border: none;\r\n"
 					+ "  color: black;\r\n"
 					+ "  border-radius: 9px;\r\n"
+					+"	 margin-right: 15px;"
 					+ "  padding: 10px 24px;\r\n"
 					+ "  text-align: center;\r\n"
 					+ "  text-decoration: none;\r\n"
 					+ "  display: inline-block;\r\n"
 					+ "  font-size: 13.5px;\r\n"
 					+ "  cursor: pointer;\r\n"
-					+ "  text-decoration: none;\r\n"
 					+ "}"
+					 
 					+ "</style>\r\n"
 					+ "\r\n"
 					+ "<title>User Detail</title>\r\n"
 					+ "</head>\r\n"
-					+ "<body >\r\n"
-					+ "<table>"
+					+ "<body id = \"body\" >\r\n"
+					+"<table >\r\n"
 					+ " 		<tr>\r\n"
 					+ " 			<td>\r\n"
-					+ " 				<img src = \"https://hranker.com/blog/wp-content/uploads/2021/03/government-of-india.jpg\" style = \"float: left; width:200px;height:90px; margin-right:231px\">\r\n"
+					+ " 				<img src = \"https://hranker.com/blog/wp-content/uploads/2021/03/government-of-india.jpg\" style = \"float: left; width:200px;height:90px; margin-right:150px\">\r\n"
 					+ " 			</td>\r\n"
 					+ " 			<td>\r\n"
-					+ " 				<h1 style = \"font-size: 30px;margin-right: 130px;\">UIDAI - Unique Identification Authority of India</h1>\r\n"
+					+ " 				<h1 style = \"font-size: 30px;margin-right: 70px;\">UIDAI - Unique Identification Authority of India</h1>\r\n"
 					+ " 			</td>\r\n"
-					+ " 	    <td>\r\n"
+					+ " 	  <td>\r\n"
 					+ " 				 <a href= \"index.jsp\" class = \"button\"><strong>Log out</strong></a>\r\n"
 					+ " 				 \r\n"
 					+ " 			</td> \r\n"
+					+ " 	  <td>\r\n"
+					+"					 <button onclick = \"printPage()\" class = \"button\" >Print Details</button>"
+					+ " 				 \r\n"
+					+ " 			</td> \r\n"
 					+ " 			<td>\r\n"
-					+ " 				<img src = \"https://theindiasaga.com/wp-content/uploads/2020/06/cat_politics183-750x400.png\"style = \"float: right; width:188px; height:90px; margin-left:120px\">\r\n"
+					+ " 				<img src = \"https://theindiasaga.com/wp-content/uploads/2020/06/cat_politics183-750x400.png\"style = \"float: right; width:168px; height:90px; margin-left:40px\">\r\n"
 					+ " 			</td>\r\n"
 					+ " 		</tr>\r\n"
 					+ " 	</table> "
 					+ "	<div class = \"admin\">\r\n"
-					+ "		<div class = \"form-box\">\r\n"
+					+ "		<div class = \"form-box\" id = \"data\">\r\n"
 					+ "				<h2 style=\"margin-left: 110px; margin-bottom: 1px;font-size: 30px\"><u>User Details</u></h2><br>\r\n"
 					+ "			 \r\n"
-					+ "				<img src = \"https://images.assetsdelivery.com/compings_v2/salamatik/salamatik1801/salamatik180100019.jpg\" style = \"width: 180px;height: 140px;margin-left: 90px;\"><br><br><br><br>\r\n"
+					+ "				<img src = \"https://images.assetsdelivery.com/compings_v2/salamatik/salamatik1801/salamatik180100019.jpg\" style = \"width: 160px;height: 120px;margin-left: 90px;\"><br><br><br><br>\r\n"
 					+ "			 	<br><br><form class = \"input-group\"action=\"UpdateForm.jsp\"> "
 					+ "			 		<label for=\"uid\"><b>Your Alloted Aadhaar Number is: </b></label> \r\n"
 					+ "	 				<input type=\"text\" class = \"input-field\" value="+aadharNo+"   disabled required>"
-					+ "	<!-- Hidden form fields -->  <input type='hidden' name='uadhar' value="+aadharNo+">"   
+					+"				<label for=\"uid\"><b>Auto-Generated Unique User Id is (Print this for future use): </b></label> \r\n"
+					+ "	 			<input type=\"text\" class = \"input-field\" value="+uniqueNo+"  disabled required>"
+					+ "	 			 <input type='hidden' name='uadhar' value="+aadharNo+">"   
 					+ "		 			<input type='submit' class=\"submitbtn\" value='Proceed'>"
+					 
 					+ "			 	</form>"
-					
+					 
 					+ "		</div>\r\n"
+					 
 					+ "	</div>\r\n"
-					+ "	 \r\n"
+					+"<script>\r\n"
+					+ "	function printPage(){\r\n"
+					+ "		var body = document.getElementById('body').innerHTML;\r\n"
+					+ "		var data = document.getElementById('data').innerHTML;\r\n"
+					+ "		document.getElementById('body').innerHTML = data;\r\n"
+					+ "		window.print();\r\n"
+					+ "	}\r\n"
+					+ "</script>"
+					 
 					+ "</body>\r\n"
 					+ "</html>");
 		}
 		else {
-			 JOptionPane.showMessageDialog(null,"You are a registered user!", "ERROR" ,JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null,"You are a registered user", "ERROR" ,JOptionPane.ERROR_MESSAGE);
 			 response.sendRedirect("index.jsp");
-	
 		}
 	}
-}
-
-
+	}
