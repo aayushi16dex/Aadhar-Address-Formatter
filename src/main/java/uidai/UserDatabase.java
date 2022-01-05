@@ -157,6 +157,40 @@ public class UserDatabase {
 			return aadhar;	
 		}	
 	}
+	
+	public String selectUserId(String mob) {
+		String userId = null;
+		try(Connection conn = getConnection()) 
+		{
+			String select_idquery = "select uniqueId from authentication where mobileNo = ?";
+			PreparedStatement pstmt = conn.prepareStatement(select_idquery);
+			pstmt.setString(1,mob);
+			pstmt.execute();
+			ResultSet rst = pstmt.executeQuery();
+			rst.next();
+			userId = rst.getString("uniqueId");
+			return userId;
+		}
+		catch (SQLException e) {
+			return userId;	
+		}	
+	}
+	
+	public void updatePassword(String mob, String pass) {
+		 
+		try(Connection conn = getConnection()) 
+		{
+			String select_passquery = "UPDATE  authentication SET password = ?  WHERE mobileNo = ?;";
+			PreparedStatement pstmt = conn.prepareStatement(select_passquery);
+			pstmt.setString(1,pass);
+			pstmt.setString(2,mob);
+			pstmt.executeUpdate(); 
+		}
+		catch (SQLException e) {
+			System.out.println("Connection not established! "+e);
+		}	
+	}
+	
 	// It returns the formatted address 
 	public String selectAddress(String aadharNo) {
 		 
