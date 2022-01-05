@@ -2,8 +2,6 @@ package uidai;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +11,7 @@ import javax.swing.JOptionPane;
 
  
 public class AuthenticationServlet extends HttpServlet {
+	int count = 0;
 	private static final long serialVersionUID = 1L;
  
     public AuthenticationServlet() {
@@ -35,7 +34,7 @@ public class AuthenticationServlet extends HttpServlet {
 				String value1 = database.selectPassword(value);
 				if(value1!=null){
 					if(upass.equals(value1)){
-						int timeout = 15;
+						int timeout = 1000;
 			            HttpSession sessionObj = request.getSession(true);
 			            sessionObj.setMaxInactiveInterval(timeout);
 			            sessionObj.invalidate();
@@ -43,7 +42,6 @@ public class AuthenticationServlet extends HttpServlet {
 			            response.setHeader("Cache-Control","no-store");
 			            response.setDateHeader("Expires", 0);
 			            response.setHeader("Refresh", timeout + "; index.jsp");
-                    
                    
 						String aadharno = database.selectAadhar(value);
 						out.println( "<html>\r\n"
@@ -118,7 +116,7 @@ public class AuthenticationServlet extends HttpServlet {
 								+ "  \r\n"
 								+ "}\r\n"
 								+ ".button {\r\n"
-								+ "  background: linear-gradient(to right,  #FAEBD7,rgb(255, 128, 64));\r\n"
+								+ "  background: linear-gradient(to right,  #FAEBD7,rgb(255, 128, 64));"
 								+ "  border: none;\r\n"
 								+ "  color: black;\r\n"
 								+ "  border-radius: 9px;\r\n"
@@ -135,23 +133,23 @@ public class AuthenticationServlet extends HttpServlet {
 								+ "<title>User Detail</title>\r\n"
 								+ "</head>\r\n"
 								+ "<body >\r\n"
-								+ "<table>"
+								+"<table >"
 								+ " 		<tr>\r\n"
 								+ " 			<td>\r\n"
-								+ " 				<img src = \"https://hranker.com/blog/wp-content/uploads/2021/03/government-of-india.jpg\" style = \"float: left; width:200px;height:90px; margin-right:231px\">\r\n"
+								+ " 				<img src = \"https://hranker.com/blog/wp-content/uploads/2021/03/government-of-india.jpg\" style = \"float: left; width:200px;height:90px; margin-right:180px\">\r\n"
 								+ " 			</td>\r\n"
 								+ " 			<td>\r\n"
-								+ " 				<h1 style = \"font-size: 30px;margin-right: 130px;\">UIDAI - Unique Identification Authority of India</h1>\r\n"
+								+ " 				<h1 style = \"font-size: 30px;margin-right: 120px;\">UIDAI - Unique Identification Authority of India</h1>\r\n"
 								+ " 			</td>\r\n"
-								+ " 	    <td>\r\n"
+								+ " 	  <td>\r\n"
 								+ " 				 <a href= \"index.jsp\" class = \"button\"><strong>Log out</strong></a>\r\n"
 								+ " 				 \r\n"
 								+ " 			</td> \r\n"
 								+ " 			<td>\r\n"
-								+ " 				<img src = \"https://theindiasaga.com/wp-content/uploads/2020/06/cat_politics183-750x400.png\"style = \"float: right; width:188px; height:90px; margin-left:120px\">\r\n"
+								+ " 				<img src = \"https://theindiasaga.com/wp-content/uploads/2020/06/cat_politics183-750x400.png\"style = \"float: right; width:188px; height:90px; margin-left:80px\">\r\n"
 								+ " 			</td>\r\n"
 								+ " 		</tr>\r\n"
-								+ " 	</table>"
+								+ " 	</table> "
 								+ "	<div class = \"admin\">\r\n"
 								+ "		<div class = \"form-box\">\r\n"
 								+ "				<h2 style=\"margin-left: 110px; margin-bottom: 1px;font-size: 30px\"><u>User Details</u></h2><br>\r\n"
@@ -174,25 +172,36 @@ public class AuthenticationServlet extends HttpServlet {
 						  out.close();
 					}
 					else{
-						JOptionPane.showMessageDialog(null,"Incorrect password. \nRe-enter the details!!", "WRONG PASSWORD" ,JOptionPane.ERROR_MESSAGE);
+						count++;
+						 if(count<4) {
+							 JOptionPane.showMessageDialog(null,"Incorrect password. \nRe-enter the details!!", "WRONG PASSWORD" ,JOptionPane.ERROR_MESSAGE);
+							 response.sendRedirect("index.jsp");
+						 }
+						 else {
+							 JOptionPane.showMessageDialog(null,"Too many unsuccessful attempts. \nReset your password!!", "WARNING" ,JOptionPane.ERROR_MESSAGE);
+							 response.sendRedirect("UserId.jsp");
+						 }
+						
+						 
+					}
+				}
+				else{
+					if(database.getConnection()==null) {
+						response.sendRedirect("ConnectionDown1.jsp");
+					}
+					else {
+						JOptionPane.showMessageDialog(null,"You are not a registered user");
 						response.sendRedirect("index.jsp");
 					}
-				
-			}
-			else{
-				if(database.getConnection()==null) {
-					response.sendRedirect("ConnectionDown1.jsp");
-				}
-				else {
-					JOptionPane.showMessageDialog(null,"You are not a registered user");
-					response.sendRedirect("index.jsp");
 				}
 			}
-		}
+	 
 		}
 		catch (Exception e)
 		{
 			 response.sendRedirect("ConnectionDown.jsp");
-		}	
+		}
+		
 	}
+
 }
