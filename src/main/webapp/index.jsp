@@ -1,4 +1,4 @@
- <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 
 <!DOCTYPE html>
@@ -29,7 +29,7 @@ body {
 
 .form-box{
 	width: 380px;
-	height: 460px;
+	height: 420px;
 	position: relative;
 	margin: 6% auto;
 	background: white;
@@ -64,7 +64,7 @@ body {
 }
 
 .input-group{
-	top: 180px;
+	top: 150px;
 	position: absolute;
 	width: 280px;
 	transition: .5s;
@@ -98,8 +98,8 @@ body {
 .check-box{
 	margin: 25px 10px 30px 0;
 }
- 
-#span{
+
+span{
 	color: #777;
 	font-size: 12.5px;
 	bottom: 68px;
@@ -113,7 +113,7 @@ body {
 	left:450px;
 }
 </style>
-
+<link rel = "stylesheet" href = "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css">
 <title>www.uidaincu.com</title>
 </head>
 <body style="">
@@ -127,13 +127,15 @@ body {
 			 <form id ="login"class="input-group" action="AuthenticationServlet" method = "post">
 				<input type = "text" class = "input-field" placeholder = "Mobile number" name = "mobile"  maxlength="10" minlength="10" pattern="[0-9]*" required>
 				<input type = "password" class = "input-field" placeholder = "Enter Password" name = "upass" id="upass" required>
+				<br><br><a href = "UserId.jsp" style = "float: right; color: #777; font-size: 13.5px; text-decoration: none;"><strong>forgot password?</strong></a><br>
 				<input type="checkbox" class = "check-box" onclick="myFunction()"><span id = "span">Show Password</span>
 				<button type="submit" class="submit-btn">Log in</button>
 			</form>
 			<form id="register" class="input-group" action="RegistrationServlet" method = "post">
 				<input type = "text" class = "input-field" placeholder = "Mobile Number" name = "mobile"  maxlength="10" minlength="10" pattern="[0-9]*" required>
-				<input type = "password" class = "input-field" placeholder = "Enter Password"  name = "upass" id="upass1" minlength="8" required>
-				<input type = "checkbox" class = "check-box" required><span id = "span">I agree to the terms & conditions</span>
+				<input type = "password" class = "input-field" placeholder = "Enter Password" name = "upass" id="upass1" minlength="8" required> 
+				
+				<input type = "checkbox" class = "check-box" required><span>I agree to the terms & conditions</span>
 				 
 				<button type="submit" class="submit-btn">Register</button>
 			</form>
